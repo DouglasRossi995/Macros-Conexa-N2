@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Macros de Atendimento — Conexa Saúde</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:   #0d2b4e;
+    --navy2:  #163a63;
+    --pink:   #e8416a;
+    --purple: #7b5ea7;
+    --light:  #f0f4f9;
+    --border: #dce5f0;
+    --text:   #1a2535;
+    --muted:  #6b7a8d;
+    --white:  #ffffff;
+    --warn-bg:#fff8e6;
+    --warn-br:#f5c842;
+    --warn-tx:#7a5c00;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--light);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 32px 16px 48px;
+  }
+
+  /* ── Header ── */
+  .app-header {
+    width: 100%;
+    max-width: 720px;
+    background: var(--navy);
+    border-radius: 16px 16px 0 0;
+    padding: 20px 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .logo-svg { width: 40px; height: 40px; flex-shrink: 0; }
+  .header-titles { display: flex; flex-direction: column; gap: 2px; }
+  .header-titles h1 { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
+  .header-titles p  { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.06em; }
+
+  .accent-bar {
+    width: 100%;
+    max-width: 720px;
+    height: 4px;
+    background: linear-gradient(90deg, var(--pink), var(--purple));
+  }
+
+  /* ── Body ── */
+  .app-body {
+    width: 100%;
+    max-width: 720px;
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 28px;
+  }
+
+  /* ── Names ── */
+  .names-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  @media (max-width: 520px) { .names-row { grid-template-columns: 1fr; } }
+
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field label {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .field label svg { width: 14px; height: 14px; stroke: var(--muted); }
+  .field input {
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: var(--light);
+    color: var(--text);
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .field input:focus {
+    border-color: var(--pink);
+    box-shadow: 0 0 0 3px rgba(232,65,106,0.12);
+  }
+  .field input::placeholder { color: #b0bcc8; }
+
+  /* ── Section label ── */
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 12px;
+  }
+
+  /* ── Macro buttons ── */
+  .macros-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .macro-btn {
+    padding: 8px 18px;
+    font-size: 13px;
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: 100px;
+    border: 1px solid var(--border);
+    background: var(--light);
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    white-space: nowrap;
+  }
+  .macro-btn:hover { border-color: var(--purple); color: var(--purple); background: #f4f0fb; }
+  .macro-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
+
+  /* ── Alert ── */
+  .alert {
+    display: none;
+    align-items: flex-start;
+    gap: 10px;
+    background: var(--warn-bg);
+    border: 1px solid var(--warn-br);
+    border-radius: 10px;
+    padding: 11px 14px;
+    margin-bottom: 16px;
+  }
+  .alert svg { width: 16px; height: 16px; stroke: #b8860b; flex-shrink: 0; margin-top: 1px; }
+  .alert-text { font-size: 13px; color: var(--warn-tx); line-height: 1.55; }
+  .alert-text strong { font-weight: 600; }
+
+  /* ── Output card ── */
+  .output-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .output-header {
+    background: var(--navy);
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .output-header span { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); }
+  .copy-btn {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 14px;
+    font-size: 12px;
+    font-family: inherit;
+    font-weight: 500;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .copy-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
+  .copy-btn svg { width: 14px; height: 14px; stroke: currentColor; }
+  .output-body {
+    padding: 20px;
+    font-size: 14px;
+    line-height: 1.85;
+    color: var(--text);
+    white-space: pre-wrap;
+    background: #fafcff;
+    min-height: 80px;
+  }
+  .placeholder { color: #b0bcc8; font-style: italic; }
+
+  /* ── Footer ── */
+  .app-footer {
+    width: 100%;
+    max-width: 720px;
+    margin-top: 18px;
+    text-align: center;
+    font-size: 12px;
+    color: #a0aab4;
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <svg class="logo-svg" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M28 18 C28 18 14 28 14 40 C14 52 24 58 24 58 L36 44 C36 44 30 40 32 34 Z" fill="#e8416a"/>
+    <path d="M52 18 C52 18 66 28 66 40 C66 52 56 58 56 58 L44 44 C44 44 50 40 48 34 Z" fill="url(#gp)"/>
+    <defs>
+      <linearGradient id="gp" x1="44" y1="18" x2="66" y2="58" gradientUnits="userSpaceOnUse">
+        <stop offset="0%" stop-color="#b060d0"/>
+        <stop offset="100%" stop-color="#7b5ea7"/>
+      </linearGradient>
+    </defs>
+  </svg>
+  <div class="header-titles">
+    <h1>Macros de atendimento</h1>
+    <p>Conexa Saúde · Relacionamento</p>
+  </div>
+</header>
+<div class="accent-bar"></div>
+
+<main class="app-body">
+
+  <div class="names-row">
+    <div class="field">
+      <label>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        Nome do paciente
+      </label>
+      <input type="text" id="patientName" placeholder="Ex: João da Silva" oninput="render()" />
+    </div>
+    <div class="field">
+      <label>
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M8 10h8M8 14h5"/></svg>
+        Seu nome (colaborador)
+      </label>
+      <input type="text" id="agentName" placeholder="Ex: Ana Paula" oninput="render()" />
+    </div>
+  </div>
+
+  <div class="section-label">Selecione o assunto</div>
+  <div class="macros-grid" id="macrosGrid"></div>
+
+  <div class="alert" id="attachAlert">
+    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"/></svg>
+    <div class="alert-text"><strong>Lembrete de anexo:</strong> Esta macro requer o envio de um formulário. Lembre-se de anexar o documento correspondente antes de enviar a mensagem ao paciente.</div>
+  </div>
+
+  <div class="output-card">
+    <div class="output-header">
+      <span id="outputTitle">Nenhum template selecionado</span>
+      <button class="copy-btn" id="copyBtn" onclick="copyText()">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+        Copiar
+      </button>
+    </div>
+    <div class="output-body" id="outputBody"><span class="placeholder">Selecione um assunto acima para visualizar a macro.</span></div>
+  </div>
+
+</main>
+
+<footer class="app-footer">Conexa Saúde · Uso interno · Time de Relacionamento</footer>
+
+<script>
+const MACROS = [
+  {id:'prontuario', label:'Prontuário da consulta', anexo:true, template:`Olá, [PACIENTE].
+ 
+Tudo bem?
+ 
+Meu nome é [AGENTE] e faço parte do time de Relacionamento da Conexa Saúde.  
+
+Recebemos a sua solicitação para receber o prontuário médico do seu atendimento. Não se preocupe, vou te ajudar! 
+  
+Para dar continuidade a sua solicitação, é necessário que me envie o formulário que está em anexo preenchido e uma cópia do seu RG frente e verso. 
+
+E também me informe qual a data dos atendimentos que deseja o prontuário.
+
+Você poderá seguir com assinatura digital gratuita, através do GOV.br. Segue abaixo esclarecimentos, contidos dentro do site: 
+
+https://www.gov.br/pt-br/servicos/assinatura-eletronica 
+  
+Segue em anexo o documento que deve ser preenchido e assinado de próprio punho ou assinatura digital, para solicitação de prontuário. Tudo bem?  
+
+O prontuário é um documento sigiloso e por esse motivo só é fornecido mediante o preenchimento do formulário a seguir.   
+
+Em caso de dúvida, permaneço à disposição!
+
+Atenciosamente, 
+[AGENTE]
+Conexa Saúde`},
+  {id:'exclusao', label:'Exclusão de cadastro', anexo:true, template:`Olá, [PACIENTE].
+Tudo bem?
+ 
+Meu nome é [AGENTE] e faço parte do time de Relacionamento da Conexa Saúde.
+ 
+Recebemos a sua solicitação para excluir os seus dados da Conexa. 
+ 
+Antes de prosseguir, é importante informar que, após a exclusão, não será possível recuperar os dados. Caso deseje seguir com a solicitação, será necessário nos encaminhar o formulário em anexo devidamente preenchido e assinado (assinatura de próprio punho ou assinatura digital), juntamente com uma cópia do seu RG.
+ 
+Você pode realizar a assinatura digital de forma gratuita por meio do GOV.br. Seguem abaixo os esclarecimentos disponíveis no site oficial:
+https://www.gov.br/pt-br/servicos/assinatura-eletronica
+ 
+Anexamos o documento que deve ser preenchido e assinado conforme orientado. Tudo bem?
+ 
+Em caso de dúvidas, permaneço à disposição.
+ 
+Atenciosamente,
+[AGENTE]
+Conexa Saúde`},
+  {id:'exclusao-prontuario', label:'Exclusão c/ prontuário ativo', anexo:false, template:`Olá, [PACIENTE].
+Tudo bem?
+
+Meu nome é [AGENTE], sou do time de Relacionamento da Conexa Saúde.
+ 
+Recebemos a sua solicitação para exclusão do seu cadastro conosco.
+ 
+Verificamos junto ao nosso time que você possui prontuário eletrônico ativo. De acordo com o artigo 6º da Lei nº 13.787/2018, o prontuário deve permanecer armazenado por 20 anos e não pode ser eliminado antes desse período.
+ 
+Sendo assim, podemos apenas inativar o seu cadastro. Caso futuramente deseje utilizar a plataforma novamente, será possível reativá-lo normalmente.
+
+Atenciosamente,
+[AGENTE]
+Conexa Saúde`},
+  {id:'bloqueio', label:'Bloqueio de cadastro', anexo:false, template:`Olá, [PACIENTE]. Tudo bem?
+
+Meu nome é [AGENTE] e sou do time de Relacionamento da Conexa Saúde.
+
+Recebemos a sua solicitação sobre a dificuldade para realizar login na plataforma. Não se preocupe, estou acompanhando o caso de perto para te ajudar!
+
+Verifiquei que o seu cadastro consta como bloqueado no nosso sistema, e o bloqueio foi realizado pelo seu plano no dia [xx/xx/xxxx]. 
+
+Por esse motivo, oriento que entre em contato com eles para verificar se há alguma pendência no seu cadastro.
+
+Qualquer dúvida, estarei à disposição.
+
+Atenciosamente,
+[AGENTE]
+Conexa Saúde`},
+  {id:'finalizacao', label:'Finalização', anexo:false, template:`Olá, [PACIENTE]! Bom dia! 😊
+
+Fico muito feliz em poder ajudar e em saber que conseguimos esclarecer todas as suas dúvidas.
+
+Se precisar de qualquer auxílio, não hesite em nos chamar. Estamos disponíveis por meio da assistente virtual Clari, na plataforma.
+
+Te desejo um ótimo dia e uma semana repleta de bons momentos 💙
+
+Com carinho, 
+[AGENTE]
+Conexa Saúde`},
+  {id:'plano-alimentar', label:'Plano alimentar', anexo:false, template:`Olá [PACIENTE], tudo bem?
+
+Meu nome é [AGENTE], sou do time de Relacionamento da Conexa Saúde 🙂
+
+Recebemos a sua solicitação sobre não recebimento do plano alimentar. Não se preocupe, estou acompanhando o caso de perto para te ajudar!
+
+Já acionamos a área responsável, que está atuando para resolver a situação o mais rápido possível. Assim que eu tiver uma atualização, volto com um retorno para você.
+
+Qualquer dúvida, estarei à disposição.
+
+Atenciosamente,
+[AGENTE]
+Conexa Saúde`}
+];
+
+let selected = null;
+
+function buildGrid() {
+  const g = document.getElementById('macrosGrid');
+  MACROS.forEach(m => {
+    const b = document.createElement('button');
+    b.className = 'macro-btn';
+    b.id = 'btn-' + m.id;
+    b.textContent = m.label;
+    b.onclick = () => select(m.id);
+    g.appendChild(b);
+  });
+}
+
+function select(id) {
+  selected = id;
+  document.querySelectorAll('.macro-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('btn-' + id).classList.add('active');
+  const macro = MACROS.find(x => x.id === id);
+  document.getElementById('attachAlert').style.display = macro.anexo ? 'flex' : 'none';
+  render();
+}
+
+function fill(t) {
+  const p = document.getElementById('patientName').value.trim() || '[nome do paciente]';
+  const a = document.getElementById('agentName').value.trim() || '[seu nome]';
+  return t.replaceAll('[PACIENTE]', p).replaceAll('[AGENTE]', a);
+}
+
+function render() {
+  if (!selected) return;
+  const m = MACROS.find(x => x.id === selected);
+  document.getElementById('outputTitle').textContent = m.label;
+  document.getElementById('outputBody').textContent = fill(m.template);
+  document.getElementById('copyBtn').style.display = 'flex';
+}
+
+function copyText() {
+  const text = document.getElementById('outputBody').textContent;
+  navigator.clipboard.writeText(text).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = text;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand('copy');
+    document.body.removeChild(ta);
+  });
+  const b = document.getElementById('copyBtn');
+  b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><polyline points="20 6 9 17 4 12"/></svg> Copiado!`;
+  setTimeout(() => {
+    b.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg> Copiar`;
+  }, 1800);
+}
+
+buildGrid();
+</script>
+</body>
+</html>
