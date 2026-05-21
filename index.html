@@ -9,10 +9,8 @@
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
     --navy:   #0d2b4e;
-    --navy2:  #163a63;
     --pink:   #e8416a;
     --purple: #7b5ea7;
     --light:  #f0f4f9;
@@ -24,7 +22,6 @@
     --warn-br:#f5c842;
     --warn-tx:#7a5c00;
   }
-
   body {
     font-family: 'DM Sans', sans-serif;
     background: var(--light);
@@ -36,33 +33,23 @@
     padding: 32px 16px 48px;
   }
 
-  /* ── Header ── */
+  /* Header */
   .app-header {
-    width: 100%;
-    max-width: 720px;
+    width: 100%; max-width: 720px;
     background: var(--navy);
     border-radius: 16px 16px 0 0;
     padding: 20px 28px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
+    display: flex; align-items: center; gap: 16px;
   }
   .logo-svg { width: 40px; height: 40px; flex-shrink: 0; }
   .header-titles { display: flex; flex-direction: column; gap: 2px; }
   .header-titles h1 { font-size: 17px; font-weight: 600; color: #fff; letter-spacing: -0.01em; }
   .header-titles p  { font-size: 11px; color: rgba(255,255,255,0.45); text-transform: uppercase; letter-spacing: 0.06em; }
+  .accent-bar { width: 100%; max-width: 720px; height: 4px; background: linear-gradient(90deg, var(--pink), var(--purple)); }
 
-  .accent-bar {
-    width: 100%;
-    max-width: 720px;
-    height: 4px;
-    background: linear-gradient(90deg, var(--pink), var(--purple));
-  }
-
-  /* ── Body ── */
+  /* Body */
   .app-body {
-    width: 100%;
-    max-width: 720px;
+    width: 100%; max-width: 720px;
     background: var(--white);
     border: 1px solid var(--border);
     border-top: none;
@@ -70,28 +57,13 @@
     padding: 28px;
   }
 
-  /* ── Names ── */
-  .names-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 14px;
-    margin-bottom: 28px;
-  }
+  /* Names */
+  .names-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 28px; }
   @media (max-width: 520px) { .names-row { grid-template-columns: 1fr; } }
-
   .field { display: flex; flex-direction: column; gap: 7px; }
-  .field label {
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--muted);
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
+  .field label { font-size: 12px; font-weight: 600; color: var(--muted); display: flex; align-items: center; gap: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
   .field label svg { width: 14px; height: 14px; stroke: var(--muted); }
-  .field input {
+  .field input, .field textarea {
     padding: 10px 14px;
     border-radius: 10px;
     border: 1px solid var(--border);
@@ -102,34 +74,22 @@
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
   }
-  .field input:focus {
+  .field input:focus, .field textarea:focus {
     border-color: var(--pink);
     box-shadow: 0 0 0 3px rgba(232,65,106,0.12);
   }
-  .field input::placeholder { color: #b0bcc8; }
+  .field input::placeholder, .field textarea::placeholder { color: #b0bcc8; }
+  .field textarea { resize: vertical; min-height: 140px; line-height: 1.7; }
 
-  /* ── Section label ── */
-  .section-label {
-    font-size: 11px;
-    font-weight: 600;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: 12px;
-  }
+  /* Section label */
+  .section-label { font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
 
-  /* ── Macro buttons ── */
-  .macros-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 22px;
-  }
+  /* Macros grid */
+  .macros-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px; }
+
   .macro-btn {
     padding: 8px 18px;
-    font-size: 13px;
-    font-family: inherit;
-    font-weight: 500;
+    font-size: 13px; font-family: inherit; font-weight: 500;
     border-radius: 100px;
     border: 1px solid var(--border);
     background: var(--light);
@@ -137,76 +97,116 @@
     cursor: pointer;
     transition: all 0.15s;
     white-space: nowrap;
+    display: flex; align-items: center; gap: 6px;
   }
   .macro-btn:hover { border-color: var(--purple); color: var(--purple); background: #f4f0fb; }
   .macro-btn.active { background: var(--navy); border-color: var(--navy); color: #fff; }
-
-  /* ── Alert ── */
-  .alert {
+  .macro-btn .del-btn {
     display: none;
-    align-items: flex-start;
-    gap: 10px;
-    background: var(--warn-bg);
-    border: 1px solid var(--warn-br);
-    border-radius: 10px;
-    padding: 11px 14px;
-    margin-bottom: 16px;
+    background: none; border: none; cursor: pointer;
+    color: inherit; padding: 0; line-height: 1;
+    font-size: 14px; opacity: 0.7;
+  }
+  .macro-btn:hover .del-btn { display: inline; }
+  .macro-btn .del-btn:hover { opacity: 1; color: var(--pink); }
+
+  /* Add macro button */
+  .add-macro-btn {
+    padding: 8px 18px;
+    font-size: 13px; font-family: inherit; font-weight: 500;
+    border-radius: 100px;
+    border: 1.5px dashed var(--border);
+    background: transparent;
+    color: var(--muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .add-macro-btn:hover { border-color: var(--pink); color: var(--pink); background: #fff0f3; }
+  .add-macro-btn svg { width: 14px; height: 14px; stroke: currentColor; }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed; inset: 0;
+    background: rgba(13,43,78,0.45);
+    z-index: 100;
+    align-items: center; justify-content: center;
+    padding: 16px;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--white);
+    border-radius: 16px;
+    width: 100%; max-width: 520px;
+    box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+    overflow: hidden;
+    animation: slideUp 0.2s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: translateY(0); } }
+  .modal-header {
+    background: var(--navy);
+    padding: 16px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .modal-header span { font-size: 14px; font-weight: 600; color: #fff; }
+  .modal-close {
+    background: none; border: none; cursor: pointer;
+    color: rgba(255,255,255,0.6); font-size: 20px; line-height: 1;
+    transition: color 0.15s;
+  }
+  .modal-close:hover { color: #fff; }
+  .modal-body { padding: 24px; display: flex; flex-direction: column; gap: 16px; }
+  .modal-footer { padding: 0 24px 24px; display: flex; gap: 10px; justify-content: flex-end; }
+
+  .btn {
+    padding: 9px 20px; font-size: 13px; font-family: inherit; font-weight: 500;
+    border-radius: 10px; cursor: pointer; transition: all 0.15s; border: 1px solid var(--border);
+  }
+  .btn-cancel { background: var(--light); color: var(--muted); }
+  .btn-cancel:hover { background: #e4eaf2; color: var(--text); }
+  .btn-save { background: var(--navy); border-color: var(--navy); color: #fff; }
+  .btn-save:hover { background: #163a63; }
+
+  /* Checkbox */
+  .checkbox-row { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+  .checkbox-row input[type=checkbox] { width: 16px; height: 16px; accent-color: var(--navy); cursor: pointer; }
+  .checkbox-row span { font-size: 13px; color: var(--muted); }
+
+  /* Alert */
+  .alert {
+    display: none; align-items: flex-start; gap: 10px;
+    background: var(--warn-bg); border: 1px solid var(--warn-br);
+    border-radius: 10px; padding: 11px 14px; margin-bottom: 16px;
   }
   .alert svg { width: 16px; height: 16px; stroke: #b8860b; flex-shrink: 0; margin-top: 1px; }
   .alert-text { font-size: 13px; color: var(--warn-tx); line-height: 1.55; }
   .alert-text strong { font-weight: 600; }
 
-  /* ── Output card ── */
-  .output-card {
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-  }
+  /* Output */
+  .output-card { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
   .output-header {
-    background: var(--navy);
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    background: var(--navy); padding: 12px 16px;
+    display: flex; align-items: center; justify-content: space-between;
   }
   .output-header span { font-size: 13px; font-weight: 500; color: rgba(255,255,255,0.8); }
   .copy-btn {
-    display: none;
-    align-items: center;
-    gap: 6px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-family: inherit;
-    font-weight: 500;
-    border-radius: 8px;
-    border: 1px solid rgba(255,255,255,0.25);
-    background: transparent;
-    color: rgba(255,255,255,0.75);
-    cursor: pointer;
-    transition: all 0.15s;
+    display: none; align-items: center; gap: 6px;
+    padding: 6px 14px; font-size: 12px; font-family: inherit; font-weight: 500;
+    border-radius: 8px; border: 1px solid rgba(255,255,255,0.25);
+    background: transparent; color: rgba(255,255,255,0.75); cursor: pointer; transition: all 0.15s;
   }
   .copy-btn:hover { background: rgba(255,255,255,0.12); color: #fff; }
   .copy-btn svg { width: 14px; height: 14px; stroke: currentColor; }
   .output-body {
-    padding: 20px;
-    font-size: 14px;
-    line-height: 1.85;
-    color: var(--text);
-    white-space: pre-wrap;
-    background: #fafcff;
-    min-height: 80px;
+    padding: 20px; font-size: 14px; line-height: 1.85;
+    color: var(--text); white-space: pre-wrap;
+    background: #fafcff; min-height: 80px;
   }
   .placeholder { color: #b0bcc8; font-style: italic; }
 
-  /* ── Footer ── */
-  .app-footer {
-    width: 100%;
-    max-width: 720px;
-    margin-top: 18px;
-    text-align: center;
-    font-size: 12px;
-    color: #a0aab4;
-  }
+  /* Footer */
+  .app-footer { width: 100%; max-width: 720px; margin-top: 18px; text-align: center; font-size: 12px; color: #a0aab4; }
 </style>
 </head>
 <body>
@@ -230,7 +230,6 @@
 <div class="accent-bar"></div>
 
 <main class="app-body">
-
   <div class="names-row">
     <div class="field">
       <label>
@@ -266,14 +265,41 @@
     </div>
     <div class="output-body" id="outputBody"><span class="placeholder">Selecione um assunto acima para visualizar a macro.</span></div>
   </div>
-
 </main>
 
 <footer class="app-footer">Conexa Saúde · Uso interno · Time de Relacionamento</footer>
 
+<!-- Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOutside(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span>Nova macro</span>
+      <button class="modal-close" onclick="closeModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="field">
+        <label>Nome do assunto</label>
+        <input type="text" id="newLabel" placeholder="Ex: Reagendamento de consulta" />
+      </div>
+      <div class="field">
+        <label>Texto da macro</label>
+        <textarea id="newTemplate" placeholder="Olá, [PACIENTE].&#10;&#10;Meu nome é [AGENTE]...&#10;&#10;Use [PACIENTE] e [AGENTE] para inserir os nomes automaticamente."></textarea>
+      </div>
+      <label class="checkbox-row">
+        <input type="checkbox" id="newAnexo" />
+        <span>Exibir aviso de anexo nesta macro</span>
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-cancel" onclick="closeModal()">Cancelar</button>
+      <button class="btn btn-save" onclick="saveMacro()">Salvar macro</button>
+    </div>
+  </div>
+</div>
+
 <script>
-const MACROS = [
-  {id:'prontuario', label:'Prontuário da consulta', anexo:true, template:`Olá, [PACIENTE].
+const DEFAULT_MACROS = [
+  {id:'prontuario', label:'Prontuário da consulta', anexo:true, custom:false, template:`Olá, [PACIENTE].
  
 Tudo bem?
  
@@ -298,7 +324,7 @@ Em caso de dúvida, permaneço à disposição!
 Atenciosamente, 
 [AGENTE]
 Conexa Saúde`},
-  {id:'exclusao', label:'Exclusão de cadastro', anexo:true, template:`Olá, [PACIENTE].
+  {id:'exclusao', label:'Exclusão de cadastro', anexo:true, custom:false, template:`Olá, [PACIENTE].
 Tudo bem?
  
 Meu nome é [AGENTE] e faço parte do time de Relacionamento da Conexa Saúde.
@@ -317,7 +343,7 @@ Em caso de dúvidas, permaneço à disposição.
 Atenciosamente,
 [AGENTE]
 Conexa Saúde`},
-  {id:'exclusao-prontuario', label:'Exclusão c/ prontuário ativo', anexo:false, template:`Olá, [PACIENTE].
+  {id:'exclusao-prontuario', label:'Exclusão c/ prontuário ativo', anexo:false, custom:false, template:`Olá, [PACIENTE].
 Tudo bem?
 
 Meu nome é [AGENTE], sou do time de Relacionamento da Conexa Saúde.
@@ -331,7 +357,7 @@ Sendo assim, podemos apenas inativar o seu cadastro. Caso futuramente deseje uti
 Atenciosamente,
 [AGENTE]
 Conexa Saúde`},
-  {id:'bloqueio', label:'Bloqueio de cadastro', anexo:false, template:`Olá, [PACIENTE]. Tudo bem?
+  {id:'bloqueio', label:'Bloqueio de cadastro', anexo:false, custom:false, template:`Olá, [PACIENTE]. Tudo bem?
 
 Meu nome é [AGENTE] e sou do time de Relacionamento da Conexa Saúde.
 
@@ -346,7 +372,7 @@ Qualquer dúvida, estarei à disposição.
 Atenciosamente,
 [AGENTE]
 Conexa Saúde`},
-  {id:'finalizacao', label:'Finalização', anexo:false, template:`Olá, [PACIENTE]! Bom dia! 😊
+  {id:'finalizacao', label:'Finalização', anexo:false, custom:false, template:`Olá, [PACIENTE]! Bom dia! 😊
 
 Fico muito feliz em poder ajudar e em saber que conseguimos esclarecer todas as suas dúvidas.
 
@@ -357,7 +383,7 @@ Te desejo um ótimo dia e uma semana repleta de bons momentos 💙
 Com carinho, 
 [AGENTE]
 Conexa Saúde`},
-  {id:'plano-alimentar', label:'Plano alimentar', anexo:false, template:`Olá [PACIENTE], tudo bem?
+  {id:'plano-alimentar', label:'Plano alimentar', anexo:false, custom:false, template:`Olá [PACIENTE], tudo bem?
 
 Meu nome é [AGENTE], sou do time de Relacionamento da Conexa Saúde 🙂
 
@@ -372,27 +398,57 @@ Atenciosamente,
 Conexa Saúde`}
 ];
 
+let macros = [];
 let selected = null;
+
+function loadMacros() {
+  try {
+    const saved = localStorage.getItem('conexa_macros');
+    const custom = saved ? JSON.parse(saved) : [];
+    macros = [...DEFAULT_MACROS, ...custom];
+  } catch(e) {
+    macros = [...DEFAULT_MACROS];
+  }
+}
+
+function saveCustomMacros() {
+  const custom = macros.filter(m => m.custom);
+  localStorage.setItem('conexa_macros', JSON.stringify(custom));
+}
 
 function buildGrid() {
   const g = document.getElementById('macrosGrid');
-  MACROS.forEach(m => {
+  g.innerHTML = '';
+  macros.forEach(m => {
     const b = document.createElement('button');
-    b.className = 'macro-btn';
+    b.className = 'macro-btn' + (selected === m.id ? ' active' : '');
     b.id = 'btn-' + m.id;
-    b.textContent = m.label;
+    b.innerHTML = `<span>${m.label}</span>`;
+    if (m.custom) {
+      const del = document.createElement('button');
+      del.className = 'del-btn';
+      del.title = 'Remover macro';
+      del.innerHTML = '×';
+      del.onclick = (e) => { e.stopPropagation(); deleteMacro(m.id); };
+      b.appendChild(del);
+    }
     b.onclick = () => select(m.id);
     g.appendChild(b);
   });
+
+  const addBtn = document.createElement('button');
+  addBtn.className = 'add-macro-btn';
+  addBtn.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> Adicionar macro`;
+  addBtn.onclick = openModal;
+  g.appendChild(addBtn);
 }
 
 function select(id) {
   selected = id;
-  document.querySelectorAll('.macro-btn').forEach(b => b.classList.remove('active'));
-  document.getElementById('btn-' + id).classList.add('active');
-  const macro = MACROS.find(x => x.id === id);
+  const macro = macros.find(x => x.id === id);
   document.getElementById('attachAlert').style.display = macro.anexo ? 'flex' : 'none';
   render();
+  buildGrid();
 }
 
 function fill(t) {
@@ -403,7 +459,8 @@ function fill(t) {
 
 function render() {
   if (!selected) return;
-  const m = MACROS.find(x => x.id === selected);
+  const m = macros.find(x => x.id === selected);
+  if (!m) return;
   document.getElementById('outputTitle').textContent = m.label;
   document.getElementById('outputBody').textContent = fill(m.template);
   document.getElementById('copyBtn').style.display = 'flex';
@@ -413,10 +470,8 @@ function copyText() {
   const text = document.getElementById('outputBody').textContent;
   navigator.clipboard.writeText(text).catch(() => {
     const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select(); document.execCommand('copy');
     document.body.removeChild(ta);
   });
   const b = document.getElementById('copyBtn');
@@ -426,6 +481,51 @@ function copyText() {
   }, 1800);
 }
 
+function openModal() {
+  document.getElementById('newLabel').value = '';
+  document.getElementById('newTemplate').value = '';
+  document.getElementById('newAnexo').checked = false;
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(() => document.getElementById('newLabel').focus(), 100);
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+}
+
+function closeModalOutside(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModal();
+}
+
+function saveMacro() {
+  const label = document.getElementById('newLabel').value.trim();
+  const template = document.getElementById('newTemplate').value.trim();
+  if (!label) { document.getElementById('newLabel').focus(); return; }
+  if (!template) { document.getElementById('newTemplate').focus(); return; }
+  const id = 'custom-' + Date.now();
+  const anexo = document.getElementById('newAnexo').checked;
+  macros.push({ id, label, anexo, custom: true, template });
+  saveCustomMacros();
+  closeModal();
+  buildGrid();
+  select(id);
+}
+
+function deleteMacro(id) {
+  if (!confirm('Remover esta macro?')) return;
+  macros = macros.filter(m => m.id !== id);
+  saveCustomMacros();
+  if (selected === id) {
+    selected = null;
+    document.getElementById('outputTitle').textContent = 'Nenhum template selecionado';
+    document.getElementById('outputBody').innerHTML = '<span class="placeholder">Selecione um assunto acima para visualizar a macro.</span>';
+    document.getElementById('copyBtn').style.display = 'none';
+    document.getElementById('attachAlert').style.display = 'none';
+  }
+  buildGrid();
+}
+
+loadMacros();
 buildGrid();
 </script>
 </body>
